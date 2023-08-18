@@ -46,6 +46,13 @@ def swap_distances():
     combobox_distance_from.current(combobox_distance_to.current())
     combobox_distance_to.current(temp)
 
+def validate_input(action, value_if_allowed):
+    # Vérifie si la valeur entrée est un nombre (entier ou flottant)
+    if value_if_allowed == "" or value_if_allowed.replace(".", "", 1).isdigit():
+        return True
+    else:
+        return False
+    
 # ~~ Methods ~~ 
 def get_currencies(event=None):
     data = requests.get('https://api.exchangerate.host/symbols').json()
@@ -144,6 +151,7 @@ tab_control.add(tab_temperature, text='Temperature')
 tab_control.add(tab_distance, text='Distance')
 
 tab_control.pack(expand=True, fill='both')
+validate_input_command = window.register(validate_input)
 
 # CURRENCY TAB
 #   - 1) header with the currency types
@@ -164,7 +172,7 @@ header_currency.pack(fill=tk.X, expand=True, )
 #   - 2) user entry
 input_currency_frame = ttk.Frame(tab_currency)
 input_currency_value = ttk.StringVar()
-input_currency = ttk.Entry(input_currency_frame, textvariable=input_currency_value).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
+input_currency = ttk.Entry(input_currency_frame, textvariable=input_currency_value, validate="key", validatecommand=(validate_input_command, "%d", "%P")).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
 button_convert_currency = ttk.Button(input_currency_frame, text='Convert', command=convert_currency_async).pack(side='left', padx=10)
 input_currency_frame.pack(expand=True, fill=tk.X)
 
@@ -194,7 +202,7 @@ header_temperature.pack(fill=tk.X, expand=True, )
 #   - 2) user entry
 input_temperature_frame = ttk.Frame(tab_temperature)
 input_temperature_value = ttk.StringVar()
-input_temperature = ttk.Entry(input_temperature_frame, textvariable=input_temperature_value).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
+input_temperature = ttk.Entry(input_temperature_frame, textvariable=input_temperature_value, validate="key", validatecommand=(validate_input_command, "%d", "%P")).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
 button_convert_temperature = ttk.Button(input_temperature_frame, text='Convert', command=convert_temperature).pack(side='left', padx=10)
 input_temperature_frame.pack(expand=True, fill=tk.X)
 
@@ -225,7 +233,7 @@ header_distance.pack(fill=tk.X, expand=True, )
 #  - 2) user entry
 input_distance_frame = ttk.Frame(tab_distance)
 input_distance_value = ttk.StringVar()
-input_distance = ttk.Entry(input_distance_frame, textvariable=input_distance_value).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
+input_distance = ttk.Entry(input_distance_frame, textvariable=input_distance_value, validate="key", validatecommand=(validate_input_command, "%d", "%P")).pack(side='left', padx = 10, fill=tk.BOTH, expand=True)
 button_convert_distance = ttk.Button(input_distance_frame, text='Convert', command=convert_distance).pack(side='left', padx=10)
 input_distance_frame.pack(expand=True, fill=tk.X)
 
